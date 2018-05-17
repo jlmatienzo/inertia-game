@@ -23,6 +23,7 @@
 void title_screen();
 void help_screen();
 void new_game();
+void write_counter(int x, int y);
 
 // board functions
 void init_board();
@@ -63,7 +64,7 @@ int main(){
 		fill_area(7, 5, 307, 192, BLACK);
 		new_game();
 		do{
-			if (num_diamonds == 64){
+			if (num_diamonds == 36){
 				write_text("YOU WIN", 140, 168, GREEN, 0);
 				write_text("NEW GAME? Y/N", 100, 178, WHITE, 0);
 				do{
@@ -90,7 +91,7 @@ int main(){
 					if (keypress=='y'){
 						fill_area(136, 168, 55, 7, BLACK);			//erase dead
 						fill_area(100, 178, 120, 7, BLACK);			//erase new game? y/n
-						fill_area(130, 20, 153, 126, BLACK);		//erase board
+						fill_area(150, 30, 153, 126, BLACK);		//erase board
 						new_game();
 						break;
 					}else if (keypress=='n'){
@@ -167,9 +168,9 @@ void title_screen(){
 	fill_area(314,195,  2,  2, RED);
 	fill_area(  7,197,307,  2, RED);
 
-	write_text("INERTIA GAME", 80, 40, YELLOW, 1);
-	write_text("NEW GAME", 100, 100, WHITE, 0);
-	write_text("EXIT", 114, 110, WHITE, 0);
+	write_text("INERTIA GAME", 110, 40, YELLOW, 1);
+	write_text("NEW GAME", 130, 100, WHITE, 0);
+	write_text("EXIT", 145, 130, WHITE, 0);
 }
 
 void help_screen(){
@@ -194,6 +195,7 @@ void new_game(){
 	for (int i=0; i<10; i++) write_pixel(210+i, 15, YELLOW);
 	help_screen();
 	draw_board();
+	write_counter(235,160);
 	dead = 0;
 }
 
@@ -255,6 +257,15 @@ void setup_level(){
 	board[y][x] = ball;
 	xPos = x; yPos = y;
 	stop_flag = 1;
+}
+
+void write_counter(int x, int y){
+	char print[8];
+
+	fill_area(x, y, 90, 7, BLACK);
+	sprintf(print, ": %2d/36", num_diamonds);
+	draw_diamond(x, y);
+	write_text(print, x+9, y, WHITE, 0);
 }
 
 void draw_arrow(int x, int y, int direction){
@@ -472,6 +483,7 @@ void move_ball(int xDirection, int yDirection){
 		}else if (board[yPos+yDirection][xPos+xDirection]==diamond){
 			fill_area((xPos+xDirection)*9+159, (yPos+yDirection)*9+39, 9, 9, BLACK);
 			num_diamonds += 1;
+			write_counter(235, 160);
 		}
 
 		if (stop_flag){
