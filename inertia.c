@@ -20,7 +20,7 @@
 #define	KEY_DN		(KEY_UP + 1)
 #define	KEY_RT		(KEY_DN + 1)
 
-// void title_screen();
+void title_screen();
 void help_screen();
 void new_game();
 
@@ -50,132 +50,148 @@ int main(){
 
 	set_graphics(VGA_320X200X256);
 
-	for (int i=0; i<10; i++) write_pixel(88+i, 8, YELLOW);
-	write_text("INERTIA GAME", 100, 5, YELLOW, 0);
-	for (int i=0; i<10; i++) write_pixel(210+i, 8, YELLOW);
-	// title_screen();
-	new_game();
+	do {
+		title_screen();
+		
+		while(!kb_ready());
+		keypress = getch();
 
-	do{
-		if (num_diamonds == 64){
-			write_text("YOU WIN", 140, 168, GREEN, 0);
-			write_text("NEW GAME? Y/N", 100, 178, WHITE, 0);
-			do{
-				while(!kb_ready());
-				keypress = (char) getch();
-				if (keypress=='y'){
-					fill_area(135, 170, 55, 7, BLACK);
-					fill_area(100, 178, 120, 7, BLACK);
-					fill_area(130, 20, 153, 126, BLACK);
-					new_game();
-					break;
-				}else if (keypress=='n'){
-					keypress = 'x';
-					break;
-				}
-			}while(1);
-		}
-		if (dead){
-			write_text("DEAD", 136, 168, RED, 0);
-			write_text("NEW GAME? Y/N", 100, 178, WHITE, 0);
-			do{
-				while(!kb_ready());
-				keypress = (char) getch();
-				if (keypress=='y'){
-					fill_area(136, 168, 55, 7, BLACK);			//erase dead
-					fill_area(100, 178, 120, 7, BLACK);			//erase new game? y/n
-					fill_area(130, 20, 153, 126, BLACK);		//erase board
-					new_game();
-					break;
-				}else if (keypress=='n'){
-					keypress = 'x';
-					break;
-				}
-			}while(1);
-		}else{
-			while(!kb_ready());
-			keypress = (char)getch();
-			if (keypress=='z')move_ball(-1, 1);		//downleft
-			if (keypress=='s') move_ball(0, 1);		//down
-			if (keypress=='c') move_ball(1, 1);		//downright
-			if (keypress=='a') move_ball(-1, 0);	//left
-			if (keypress=='d') move_ball(1, 0);		//right
-			if (keypress=='q') move_ball(-1, -1);	//upleft
-			if (keypress=='w') move_ball(0, -1);	//up
-			if (keypress=='e') move_ball(1, -1);	//upright
-			if (keypress=='n'){
+		if (keypress == 'x') break;
+		else if (keypress == 'n') ;
+		else continue;
+
+		fill_area(7, 5, 307, 192, BLACK);
+		new_game();
+		do{
+			if (num_diamonds == 64){
+				write_text("YOU WIN", 140, 168, GREEN, 0);
 				write_text("NEW GAME? Y/N", 100, 178, WHITE, 0);
 				do{
 					while(!kb_ready());
-					keypress = (char) getch();
+					keypress = getch();
 					if (keypress=='y'){
+						fill_area(135, 170, 55, 7, BLACK);
 						fill_area(100, 178, 120, 7, BLACK);
 						fill_area(130, 20, 153, 126, BLACK);
 						new_game();
 						break;
 					}else if (keypress=='n'){
-						fill_area(100, 178, 120, 7, BLACK);
+						keypress = 'x';
 						break;
 					}
 				}while(1);
 			}
-			if (keypress=='x'){
-				write_text("EXIT GAME? Y/N", 100, 178, WHITE, 0);
+			if (dead){
+				write_text("DEAD", 136, 168, RED, 0);
+				write_text("NEW GAME? Y/N", 100, 178, WHITE, 0);
 				do{
 					while(!kb_ready());
-					keypress = (char) getch();
+					keypress = getch();
 					if (keypress=='y'){
-						keypress = 'x'
+						fill_area(136, 168, 55, 7, BLACK);			//erase dead
+						fill_area(100, 178, 120, 7, BLACK);			//erase new game? y/n
+						fill_area(130, 20, 153, 126, BLACK);		//erase board
+						new_game();
 						break;
 					}else if (keypress=='n'){
-						fill_area(100, 178, 120, 7, BLACK);
+						keypress = 'x';
 						break;
 					}
 				}while(1);
+			}else{
+				while(!kb_ready());
+				keypress = getch();
+				if (keypress==',')	move_ball(-1, 1);		//downleft
+				if (keypress=='.') 	move_ball(0, 1);		//down
+				if (keypress=='/') 	move_ball(1, 1);		//downright
+				if (keypress=='k') 	move_ball(-1, 0);		//left
+				if (keypress==';') 	move_ball(1, 0);		//right
+				if (keypress=='i') 	move_ball(-1, -1);		//upleft
+				if (keypress=='o') 	move_ball(0, -1);		//up
+				if (keypress=='p') 	move_ball(1, -1);		//upright
+				// if (keypress==KEY_END)	move_ball(-1, 1);		//downleft
+				// if (keypress==KEY_DN) 	move_ball(0, 1);		//down
+				// if (keypress==KEY_PGDN) move_ball(1, 1);		//downright
+				// if (keypress==KEY_LFT) 	move_ball(-1, 0);		//left
+				// if (keypress==KEY_RT) 	move_ball(1, 0);		//right
+				// if (keypress==KEY_HOME) move_ball(-1, -1);		//upleft
+				// if (keypress==KEY_UP) 	move_ball(0, -1);		//up
+				// if (keypress==KEY_PGUP) move_ball(1, -1);		//upright
+				if (keypress=='n'){
+					write_text("NEW GAME? Y/N", 100, 178, WHITE, 0);
+					do{
+						while(!kb_ready());
+						keypress = getch();
+						if (keypress=='y'){
+							fill_area(100, 178, 120, 7, BLACK);
+							fill_area(150, 30, 153, 126, BLACK);
+							new_game();
+							break;
+						}else if (keypress=='n'){
+							fill_area(100, 178, 120, 7, BLACK);
+							break;
+						}
+					}while(1);
+				}
+				if (keypress=='x'){
+					write_text("EXIT GAME? Y/N", 100, 178, WHITE, 0);
+					do{
+						while(!kb_ready());
+						keypress = getch();
+						if (keypress=='y'){
+							keypress = 'x';
+							break;
+						}else if (keypress=='n'){
+							fill_area(100, 178, 130, 7, BLACK);
+							break;
+						}
+					}while(1);
+				}
 			}
-		}
-	}while(keypress != 'x');
+		}while(keypress != 'x');
+		fill_area(7, 5, 307, 192, BLACK);
+	}while(1);
 	set_graphics(VGA_TEXT80X25X16);
+	clrscr();
 	return 0;
 }
 
-// void title_screen(){
-// 	fill_area(  7,  3,307,  2, RED);
-// 	fill_area(  5,  5,  2,  2, RED);
-// 	fill_area(314,  5,  2,  2, RED);
-// 	fill_area(  3,  7,  2,187, RED);
+void title_screen(){
+	fill_area(  7,  3,307,  2, RED);
+	fill_area(  5,  5,  2,  2, RED);
+	fill_area(314,  5,  2,  2, RED);
+	fill_area(  3,  7,  2,187, RED);
 
-// 	fill_area(  5,  7,  2,187, YELLOW);
-// 	fill_area(  7,  5,307,192, YELLOW);
-// 	fill_area(314,  7,  2,187, YELLOW);
+	fill_area(316,  7,  2,187, RED);
+	fill_area(  5,195,  2,  2, RED);
+	fill_area(314,195,  2,  2, RED);
+	fill_area(  7,197,307,  2, RED);
 
-// 	fill_area(316,  7,  2,187, RED);
-// 	fill_area(  5,195,  2,  2, RED);
-// 	fill_area(314,195,  2,  2, RED);
-// 	fill_area(  7,197,307,  2, RED);
-
-// 	write_text("INERTIA GAME", 80, 30, BLACK, 10);
-// 	write_text("NEW GAME", 100, 70, BLACK, 0);
-// 	write_text("EXIT", 100, 79, BLACK, 0);
-// }
+	write_text("INERTIA GAME", 80, 40, YELLOW, 1);
+	write_text("NEW GAME", 100, 100, WHITE, 0);
+	write_text("EXIT", 114, 110, WHITE, 0);
+}
 
 void help_screen(){
-	write_text("CONTROLS", 22, 20, WHITE, 0);
-	write_text("Z - MOVE ", 4, 39, WHITE, 0);	draw_arrow(77, 39, 1);
-	write_text("S - MOVE ", 4, 47, WHITE, 0);	draw_arrow(77, 47, 2);
-	write_text("C - MOVE ", 4, 55, WHITE, 0);	draw_arrow(77, 55, 3);
-	write_text("A - MOVE ", 4, 63, WHITE, 0);	draw_arrow(77, 63, 4);
-	write_text("D - MOVE ", 4, 71, WHITE, 0);	draw_arrow(77, 71, 6);
-	write_text("Q - MOVE ", 4, 79, WHITE, 0);	draw_arrow(77, 79, 7);
-	write_text("W - MOVE ", 4, 87, WHITE, 0);	draw_arrow(77, 87, 8);
-	write_text("E - MOVE ", 4, 95, WHITE, 0);	draw_arrow(77, 95, 9);
-	write_text("N - NEW GAME", 4, 120, WHITE, 0);
-	write_text("X - EXIT GAME",4, 130, WHITE, 0);
+	write_text("CONTROLS", 37, 30, WHITE, 0);
+	write_text("1 - MOVE ", 23, 40, WHITE, 0);	draw_arrow(96, 40, 1);
+	write_text("2 - MOVE ", 23, 50, WHITE, 0);	draw_arrow(96, 50, 2);
+	write_text("3 - MOVE ", 23, 60, WHITE, 0);	draw_arrow(96, 60, 3);
+	write_text("4 - MOVE ", 23, 70, WHITE, 0);	draw_arrow(96, 70, 4);
+	write_text("6 - MOVE ", 23, 80, WHITE, 0);	draw_arrow(96, 80, 6);
+	write_text("7 - MOVE ", 23, 90, WHITE, 0);	draw_arrow(96, 90, 7);
+	write_text("8 - MOVE ", 23, 100, WHITE, 0);	draw_arrow(96, 100, 8);
+	write_text("9 - MOVE ", 23, 110, WHITE, 0);	draw_arrow(96, 110, 9);
+	write_text("N - NEW GAME", 23, 130, WHITE, 0);
+	write_text("X - EXIT GAME",23, 140, WHITE, 0);
 }
 
 void new_game(){
 	init_board();
 	setup_level();
+	for (int i=0; i<10; i++) write_pixel(88+i, 15, YELLOW);
+	write_text("INERTIA GAME", 100, 12, YELLOW, 0);
+	for (int i=0; i<10; i++) write_pixel(210+i, 15, YELLOW);
 	help_screen();
 	draw_board();
 	dead = 0;
@@ -388,27 +404,27 @@ void draw_board(){
 	for (i=-1; i<13; i++){
 		for (j=-1; j<16; j++){
 			if (i==-1 || i==12 || j==-1 || j==15){
-				draw_block(j*9+139, i*9+29);
+				draw_block(j*9+159, i*9+39);
 				continue;
 			}
 			switch(board[i][j]){
 				case block:
-					draw_block(j*9+139, i*9+29);
+					draw_block(j*9+159, i*9+39);
 					break;
 				case stop:
-					draw_stop(j*9+139, i*9+29);
+					draw_stop(j*9+159, i*9+39);
 					break;
 				case bomb:
-					write_text("X", j*9+140, i*9+30, RED, 0);
+					write_text("X", j*9+160, i*9+40, RED, 0);
 					break;
 				case diamond:
-					draw_diamond(j*9+139, i*9+29);
+					draw_diamond(j*9+159, i*9+39);
 					break;
 				case ball:
 					if (stop_flag){
-						draw_stop(j*9+139, i*9+29);
+						draw_stop(j*9+159, i*9+39);
 					}
-					draw_ball(j*9+139, i*9+29, LIGHTGREEN);
+					draw_ball(j*9+159, i*9+39, LIGHTGREEN);
 					break;
 			}
 		}
@@ -427,49 +443,49 @@ void move_ball(int xDirection, int yDirection){
 			// if ball entered a stop
 			if (stop_flag){
 				board[yPos][xPos] = stop;
-				fill_area(xPos*9+140, yPos*9+30, 7, 7, BLACK);
+				fill_area(xPos*9+160, yPos*9+40, 7, 7, BLACK);
 			}else{
 				board[yPos][xPos] = empty;
-				fill_area(xPos*9+139, yPos*9+29, 9, 9, BLACK);
+				fill_area(xPos*9+159, yPos*9+39, 9, 9, BLACK);
 			}
 			stop_flag = 1;
 			xPos += xDirection; yPos += yDirection;
 			board[yPos][xPos] = ball;
-			draw_ball(xPos*9+139, yPos*9+29, LIGHTGREEN);
+			draw_ball(xPos*9+159, yPos*9+39, LIGHTGREEN);
 			break;
 		}else if (board[yPos+yDirection][xPos+xDirection]==bomb){
 			// if ball hit a bomb
 			if (stop_flag){
 				board[yPos][xPos] = stop;
-				fill_area(xPos*9+140, yPos*9+30, 7, 7, BLACK);
+				fill_area(xPos*9+160, yPos*9+40, 7, 7, BLACK);
 			}else{
 				board[yPos][xPos] = empty;
-				fill_area(xPos*9+139, yPos*9+29, 9, 9, BLACK);
+				fill_area(xPos*9+159, yPos*9+39, 9, 9, BLACK);
 			}
 			xPos += xDirection; yPos += yDirection;
 			board[yPos][xPos] = ball;
-			fill_area(xPos*9+139, yPos*9+29, 9, 9, BLACK);
-			draw_ball(xPos*9+139, yPos*9+29, RED);
+			fill_area(xPos*9+159, yPos*9+39, 9, 9, BLACK);
+			draw_ball(xPos*9+159, yPos*9+39, RED);
 			stop_flag = 0;
 			dead = 1;
 			break;
 		}else if (board[yPos+yDirection][xPos+xDirection]==diamond){
-			fill_area((xPos+xDirection)*9+139, (yPos+yDirection)*9+29, 9, 9, BLACK);
+			fill_area((xPos+xDirection)*9+159, (yPos+yDirection)*9+39, 9, 9, BLACK);
 			num_diamonds += 1;
 		}
 
 		if (stop_flag){
 			board[yPos][xPos] = stop;
-			fill_area(xPos*9+140, yPos*9+30, 7, 7, BLACK);
+			fill_area(xPos*9+160, yPos*9+40, 7, 7, BLACK);
 		}else{
 			board[yPos][xPos] = empty;
-			fill_area(xPos*9+139, yPos*9+29, 9, 9, BLACK);
+			fill_area(xPos*9+159, yPos*9+39, 9, 9, BLACK);
 		}
 
 		xPos += xDirection; yPos += yDirection;
 		stop_flag = 0;
 		board[yPos][xPos] = ball;
-		draw_ball(xPos*9+139, yPos*9+29, LIGHTGREEN);
+		draw_ball(xPos*9+159, yPos*9+39, LIGHTGREEN);
 		delay(2);
 	}
 }
