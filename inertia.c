@@ -65,15 +65,15 @@ int main(){
 		new_game();
 		do{
 			if (num_diamonds == 36){
-				write_text("YOU WIN", 140, 168, GREEN, 0);
+				write_text("YOU WIN!", 136, 168, GREEN, 0);
 				write_text("NEW GAME? Y/N", 100, 178, WHITE, 0);
 				do{
 					while(!kb_ready());
 					keypress = getch();
 					if (keypress=='y'){
-						fill_area(135, 170, 55, 7, BLACK);
+						fill_area(136, 168, 55, 7, BLACK);
 						fill_area(100, 178, 120, 7, BLACK);
-						fill_area(130, 20, 153, 126, BLACK);
+						fill_area(150, 30, 153, 126, BLACK);
 						new_game();
 						break;
 					}else if (keypress=='n'){
@@ -168,9 +168,9 @@ void title_screen(){
 	fill_area(314,195,  2,  2, RED);
 	fill_area(  7,197,307,  2, RED);
 
-	write_text("INERTIA GAME", 110, 40, YELLOW, 1);
-	write_text("NEW GAME", 130, 100, WHITE, 0);
-	write_text("EXIT", 145, 130, WHITE, 0);
+	write_text("INERTIA GAME", 100, 40, YELLOW, 1);
+	write_text("NEW GAME", 125, 100, WHITE, 0);
+	write_text("EXIT", 140, 130, WHITE, 0);
 }
 
 void help_screen(){
@@ -196,6 +196,7 @@ void new_game(){
 	help_screen();
 	draw_board();
 	write_counter(235,160);
+	num_diamonds = 0;
 	dead = 0;
 }
 
@@ -208,57 +209,69 @@ void init_board(){
 
 void setup_level(){
 	int x, y;
-	int num_blocks = 36;
-	int num_stops  = 36;
-	int num_bombs  = 36;
-	num_diamonds   = 36;
-
 	time_t t;
 	srand(time());
 
-	while (num_blocks > 0){
-		x = (rand()%15); y = (rand()%12);
+	FILE *fp;
+	int fsize;
+	char *buff;
+	int i=0,j,k;
 
-		if (! board[y][x]){
-			board[y][x] = block;
-			num_blocks --;
-		}
+	switch(rand()%3){
+		case 1: if ((fp = fopen("map.txt","r"))==NULL){
+      			printf("File not found.\n");
+      			exit(1);}
+				break;
+		case 2: if ((fp = fopen("map2.txt","r"))==NULL){
+      			printf("File not found.\n");
+      			exit(1);}
+				break;
+		case 3: if ((fp = fopen("map3.txt","r"))==NULL){
+      			printf("File not found.\n");
+      			exit(1);}
+				break;
+		default: if ((fp = fopen("map.txt","r"))==NULL){
+      			printf("File not found.\n");
+      			exit(1);}
+				break;
 	}
+	//file reading
+	fseek(fp, 0, SEEK_SET);
+	fseek(fp, 0, SEEK_END);
+	fsize=ftell(fp);
+	fseek(fp, 0, SEEK_SET);
+	buff = (char *)malloc(fsize);
+	fread(buff, fsize,1,fp);
+	fclose(fp);
 
-	while (num_stops > 0){
-		x = (rand()%15); y = (rand()%12);
+   	for(j=0; j<12; j++){
+      	for(k=0; k<16; k++){
+            if(k!=15){	//hex to ascii
+            	switch(((unsigned char*)buff)[i]){
+                  	case '0': board[j][k] = empty;
+                        break;
+                  	case '1': board[j][k] = block;
+                        break;
+                  	case '2': board[j][k] = stop;
+                        break;
+                  	case '3': board[j][k] = bomb;
+                        break;
+                  	case '4': board[j][k] = diamond;
+                        break;
+            }}
+            i++;
+      }
+   }
+	free(buff);
 
-		if (! board[y][x]){
-			board[y][x] = stop;
-			num_stops --;
-		}
-	}
-
-	while (num_bombs > 0){
-		x = (rand()%15); y = (rand()%12);
-
-		if (! board[y][x]){
-			board[y][x] = bomb;
-			num_bombs --;
-		}
-	}
-
-	while (num_diamonds > 0){
-		x = (rand()%15); y = (rand()%12);
-
-		if (! board[y][x]){
-			board[y][x] = diamond;
-			num_diamonds --;
-		}
-	}
-	while (board[y][x] != 0){
+	x = (rand()%15); y = (rand()%12);
+	while (board[y][x] != 0 ){
 		x = (rand()%15); y = (rand()%12);
 	}
 	board[y][x] = ball;
 	xPos = x; yPos = y;
 	stop_flag = 1;
 }
-
 void write_counter(int x, int y){
 	char print[8];
 
