@@ -26,7 +26,6 @@ void new_game();
 void write_counter(int x, int y);
 
 // board functions
-void init_board();
 void setup_level();
 void draw_block(int x, int y);
 void draw_stop(int x, int y);
@@ -64,24 +63,6 @@ int main(){
 		fill_area(7, 5, 307, 192, BLACK);
 		new_game();
 		do{
-			if (num_diamonds == 36){
-				write_text("YOU WIN!", 136, 168, GREEN, 0);
-				write_text("NEW GAME? Y/N", 100, 178, WHITE, 0);
-				do{
-					while(!kb_ready());
-					keypress = getch();
-					if (keypress=='y'){
-						fill_area(136, 168, 55, 7, BLACK);
-						fill_area(100, 178, 120, 7, BLACK);
-						fill_area(150, 30, 153, 126, BLACK);
-						new_game();
-						break;
-					}else if (keypress=='n'){
-						keypress = 'x';
-						break;
-					}
-				}while(1);
-			}
 			if (dead){
 				write_text("DEAD", 136, 168, RED, 0);
 				write_text("NEW GAME? Y/N", 100, 178, WHITE, 0);
@@ -92,6 +73,23 @@ int main(){
 						fill_area(136, 168, 55, 7, BLACK);			//erase dead
 						fill_area(100, 178, 120, 7, BLACK);			//erase new game? y/n
 						fill_area(150, 30, 153, 126, BLACK);		//erase board
+						new_game();
+						break;
+					}else if (keypress=='n'){
+						keypress = 'x';
+						break;
+					}
+				}while(1);
+			}else if (num_diamonds == 36){
+				write_text("YOU WIN!", 136, 168, GREEN, 0);
+				write_text("NEW GAME? Y/N", 100, 178, WHITE, 0);
+				do{
+					while(!kb_ready());
+					keypress = getch();
+					if (keypress=='y'){
+						fill_area(136, 168, 70, 7, BLACK);
+						fill_area(100, 178, 120, 7, BLACK);
+						fill_area(150, 30, 153, 126, BLACK);
 						new_game();
 						break;
 					}else if (keypress=='n'){
@@ -188,7 +186,8 @@ void help_screen(){
 }
 
 void new_game(){
-	init_board();
+	num_diamonds = 0;
+	dead = 0;
 	setup_level();
 	for (int i=0; i<10; i++) write_pixel(88+i, 15, YELLOW);
 	write_text("INERTIA GAME", 100, 12, YELLOW, 0);
@@ -196,14 +195,6 @@ void new_game(){
 	help_screen();
 	draw_board();
 	write_counter(235,160);
-	num_diamonds = 0;
-	dead = 0;
-}
-
-void init_board(){
-	for (int i=0;i<12;i++)
-		for (int j=0;j<15;j++)
-			board[i][j] = 0;
 }
 
 
