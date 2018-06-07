@@ -6,7 +6,8 @@ Inertia Game ported for the [ics-os](https://github.com/srg-ics-uplb/ics-os.git)
 Extract files in the contrib folder within ics-os
 
 Run:
-
-	$ make install
-
+```
+$ cd ics-os/ics-os/contrib/inertia-game
+$ make install
+```
 Boot ics-os
